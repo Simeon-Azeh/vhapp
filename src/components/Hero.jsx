@@ -78,7 +78,7 @@ function Hero() {
         {/* Right Side: Hero Image */}
         <div className='image-section w-full md:w-1/2' data-aos="fade-left">
           <img 
-            src="/HeroImg.png" 
+            src="/rb_2753.png" 
             alt="Vocational training hero" 
             className="w-full h-auto object-cover rounded-lg"
           />
