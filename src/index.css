@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+ 
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  color: rgba(211, 211, 211, 0.87);
+  background-color: #f9f9f9;
+}
+
+
+
+/* Webkit Browsers */
+::-webkit-scrollbar {
+  width: 6px; /* width for vertical scrollbars */
+  height: 6px; /* height for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #414760; /* Scrollbar color */
+  border-radius: 6px; /* Rounded corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #414760; /* Darker color on hover */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #414760 #f1f1f1;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #414760;
+  border-radius: 6px;
+  border: 3px solid #f1f1f1;
+}
+.hide-scroll {
+  /* Custom styles to hide the scrollbar */
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer 10+ */
+}
+
+.hide-scroll::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+
+
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.wave-icon {
+  display: inline-block;
+  animation: wave 5s infinite;
+  transform-origin: 80% 70%;
+}
+.custom-flag-select {
+  background-color: transparent !important;
+  border: none !important;
+  color: white !important;
+}
+
+.custom-flag-select .flag-select__option {
+  background-color: #1a1818 !important;
+  color: white !important;
+}
+.square-pattern {
+  background-image: radial-gradient(
+    rgba(224, 224, 224, 0.8) 1px, 
+    transparent 1px
+  ), 
+  radial-gradient(
+    rgba(224, 224, 224, 0.5) 1px, 
+    transparent 1px
+  );
+  background-size: 40px 40px; /* Increase the square size */
+  background-position: 0 0;
+  animation: moveSquares 10s linear infinite;
+}
+
+@keyframes moveSquares {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+/* Hide square pattern in dark mode */
+.dark .square-pattern {
+  background-image: none;
+}
+
