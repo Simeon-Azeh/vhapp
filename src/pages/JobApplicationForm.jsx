@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { GoArrowLeft } from "react-icons/go";
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 function JobApplicationForm() {
   const { jobId } = useParams();
@@ -14,6 +15,21 @@ function JobApplicationForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        setUsername(user.email); // Use email as username
+        setName(user.displayName || user.email); // Use displayName or email as name
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,7 +53,9 @@ function JobApplicationForm() {
         email: formData.email,
         resume: formData.resume.name, // Assuming you handle file upload separately
         linkedin: formData.linkedin,
-        appliedAt: new Date()
+        appliedAt: new Date(),
+        username,
+        name
       });
 
       // Add activity to the activities collection
@@ -46,7 +64,9 @@ function JobApplicationForm() {
         activity: `Applied for job ID: ${jobId}`,
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
-        link: `/jobs/${jobId}`
+        link: `/jobs/${jobId}`,
+        username,
+        name
       });
 
       setSuccess('Application submitted successfully.');

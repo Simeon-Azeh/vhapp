@@ -10,6 +10,7 @@ const Enrollment = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
 
   // Destructure with default values to prevent undefined errors
   const { 
@@ -28,7 +29,8 @@ const Enrollment = () => {
       const auth = getAuth();
       const user = auth.currentUser;
       if (user) {
-        setUsername(user.displayName || user.email); // Use displayName or email as username
+        setUsername(user.email); // Use email as username
+        setName(user.displayName || user.email); // Use displayName or email as name
       }
     };
 
@@ -44,6 +46,7 @@ const Enrollment = () => {
       const db = getFirestore();
       await addDoc(collection(db, 'enrollment'), {
         username,
+        name,
         image,
         title,
         category,
@@ -62,7 +65,8 @@ const Enrollment = () => {
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
         link: `/courses/${title}`,
-        username
+        username,
+        name
       });
 
       setSuccess('Enrolled successfully.');
