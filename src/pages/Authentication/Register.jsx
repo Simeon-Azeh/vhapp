@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc'; // Google icon from react-icons
-
 import { doCreateUserWithEmailAndPassword, doSignInWithGoogle, doSendEmailVerification } from '../../firebase/auth'; // Firebase functions
 import VerificationModal from '../../components/VerificationModal';
 import { updateProfile } from 'firebase/auth';
+import { getFirestore, doc, setDoc } from 'firebase/firestore'; // Firestore functions
 
 function Register() {
   const navigate = useNavigate();
@@ -57,6 +57,13 @@ function Register() {
         // Update profile with username
         await updateProfile(user, {
           displayName: formData.username,
+        });
+
+        // Add user data to Firestore
+        const db = getFirestore();
+        await setDoc(doc(db, 'users', user.uid), {
+          username: formData.username,
+          email: formData.email,
         });
 
         // Send email verification and show modal
@@ -114,7 +121,7 @@ function Register() {
                 required
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="appearance-none rounded-md relative block w-full px-3 py-3 border border-gray-300 focus:outline-none sm:text-sm bg-transparent text-gray-700"
+                className="relative block w-full px-3 py-3 text-gray-700 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none sm:text-sm"
                 placeholder="Username"
               />
               {errors.username && <p className="mt-2 text-xs text-red-500">{errors.username}</p>}
@@ -128,7 +135,7 @@ function Register() {
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="appearance-none rounded-md relative block w-full px-3 py-3 border border-gray-300 focus:outline-none sm:text-sm bg-transparent text-gray-700"
+                className="relative block w-full px-3 py-3 text-gray-700 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none sm:text-sm"
                 placeholder="Email"
               />
               {errors.email && <p className="mt-2 text-xs text-red-500">{errors.email}</p>}
@@ -142,7 +149,7 @@ function Register() {
                 required
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="appearance-none rounded-md relative block w-full px-3 py-3 border border-gray-300 focus:outline-none sm:text-sm bg-transparent text-gray-700"
+                className="relative block w-full px-3 py-3 text-gray-700 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none sm:text-sm"
                 placeholder="Password"
               />
               {errors.password && <p className="mt-2 text-xs text-red-500">{errors.password}</p>}
@@ -156,7 +163,7 @@ function Register() {
                 required
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                className="appearance-none rounded-md relative block w-full px-3 py-3 border border-gray-300 focus:outline-none sm:text-sm bg-transparent text-gray-700"
+                className="relative block w-full px-3 py-3 text-gray-700 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none sm:text-sm"
                 placeholder="Confirm Password"
               />
               {errors.confirmPassword && <p className="mt-2 text-xs text-red-500">{errors.confirmPassword}</p>}
@@ -180,7 +187,7 @@ function Register() {
         <div className="flex items-center justify-center space-x-2">
           <button
             onClick={handleGoogleAuth}
-            className="w-full mt-4 flex justify-center items-center px-4 py-3 border rounded-md text-sm font-medium text-gray-900 bg-white border-gray-300 hover:bg-gray-50"
+            className="flex items-center justify-center w-full px-4 py-3 mt-4 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
           >
         
             <FcGoogle className="mr-2 text-2xl" />

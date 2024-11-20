@@ -140,11 +140,11 @@ function Courses() {
       <div className=" flex-1 lg:ml-[200px] font-inter">
         <Navbar />
         <div className="p-6">
-          <h1 className="text-2xl font-semibold mb-6 text-gray-800">Courses</h1>
+          <h1 className="mb-6 text-2xl font-semibold text-gray-800">Courses</h1>
           
           <SearchBar onSearch={setSearchTerm}  onCategoryChange={setSelectedCategory}  />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-6">
+          <div className="grid grid-cols-1 gap-2 mt-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredCourses.map((course, index) => (
               <CourseCard 
                 key={index} 

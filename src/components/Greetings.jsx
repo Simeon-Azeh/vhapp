@@ -1,10 +1,11 @@
-// src/components/Greeting.js
 import React, { useEffect, useState } from 'react';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const Greeting = () => {
   const [greeting, setGreeting] = useState('Hello');
+  const [username, setUsername] = useState('');
 
-  // Function to get the appropriate greeting based on local time
   const getGreeting = () => {
     const hour = new Date().getHours();
 
@@ -17,22 +18,33 @@ const Greeting = () => {
     }
   };
 
-  // Effect to set the greeting based on local time
   useEffect(() => {
-    setGreeting(getGreeting());
+    const fetchUsername = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        const db = getFirestore();
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          setUsername(userDoc.data().username);
+        }
+      }
+    };
 
-    // Set a timeout to change greeting to "Hello" after 10 seconds
+    setGreeting(getGreeting());
+    fetchUsername();
+
     const timeout = setTimeout(() => {
       setGreeting('Hello');
-    }, 10000); // Change to "Hello" after 10 seconds
+    }, 10000);
 
-    return () => clearTimeout(timeout); // Clean up timeout on unmount
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
     <div>
       <h1 className="text-2xl font-semibold text-gray-800 font-inter">
-        {greeting}! <span className="text-[#8cd836]">Junior</span>
+        {greeting}! <span className="text-[#8cd836]">{username}</span>
       </h1>
      
       <button className="mt-2 bg-[#8cd836] text-white p-2 rounded shadow-md font-inter">
