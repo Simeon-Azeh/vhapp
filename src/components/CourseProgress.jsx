@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaEllipsisV } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, or } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const CourseProgress = () => {
@@ -16,7 +16,13 @@ const CourseProgress = () => {
       const user = auth.currentUser;
       if (user) {
         const db = getFirestore();
-        const q = query(collection(db, 'enrollment'), where('username', '==', user.displayName || user.email));
+        const q = query(
+          collection(db, 'enrollment'),
+          or(
+            where('username', '==', user.displayName),
+            where('username', '==', user.email)
+          )
+        );
         const querySnapshot = await getDocs(q);
         const enrolledCourses = querySnapshot.docs.map(doc => doc.data());
         setCourses(enrolledCourses);
